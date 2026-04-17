@@ -1,0 +1,194 @@
+================================================================================
+STEP 1: Fetching data from FRED...
+================================================================================
++ Retrieved GDPC1: Реальный ВВП
++ Retrieved PCE: Личное потребление
++ Retrieved GPDI: Валовые частные инвестиции
++ Retrieved GCE: Государственное потребление и инвестиции
++ Retrieved EXPGSC1: Реальный экспорт
++ Retrieved GDPDEF: Дефлятор ВВП
++ Retrieved FEDFUNDS: Ставка по федеральным фондам
+
+VAR variables (coursework AD): ['GDPC1', 'PCE', 'GPDI', 'GCE', 'EXPGSC1', 'GDPDEF', 'FEDFUNDS']
+Data shape: (264, 7)
+Date range: 1960-01-01 to 2025-10-01
+
+================================================================================
+STEP 2: Preprocessing data...
+================================================================================
+df_quaterly                GDPC1    PCE    GPDI      GCE  EXPGSC1  GDPDEF  FEDFUNDS
+DATE                                                                   
+1960-03-31  3517.181  323.6  96.476  116.951  104.686  15.428      3.99
+1960-06-30  3498.246  336.5  87.096  118.380  107.689  15.467      3.92
+1960-09-30  3515.385  331.4  86.377  122.419  110.036  15.520      3.23
+1960-12-31  3470.278  335.4  75.963  124.330  110.622  15.566      2.47
+1961-03-31  3493.703  332.2  78.378  126.218  109.861  15.600      1.45
+Missing values after cleaning: 0
+
+Transformations applied: natural log for ['GDPC1', 'PCE', 'GPDI', 'GCE', 'EXPGSC1', 'GDPDEF']
+FEDFUNDS (interest rate) kept in levels.
+
+Augmented Dickey‑Fuller (constant): MacKinnon p‑value; stationary if τ < 5% critical value:
+  GDPC1        : t-stat =  -2.4990, p-value = 0.1157 -> Non‑stationary
+  PCE          : t-stat =  -2.7860, p-value = 0.0603 -> Non‑stationary
+  GPDI         : t-stat =  -2.2397, p-value = 0.1922 -> Non‑stationary
+  GCE          : t-stat =  -2.5110, p-value = 0.1128 -> Non‑stationary
+  EXPGSC1      : t-stat =  -1.9514, p-value = 0.3083 -> Non‑stationary
+  GDPDEF       : t-stat =  -2.0150, p-value = 0.2800 -> Non‑stationary
+  FEDFUNDS     : t-stat =  -1.6446, p-value = 0.4599 -> Non‑stationary
+
+ADF vs MacKinnon critical values (+ = τ < CV -> reject unit root at that level):
+Variable   |   t-stat |    CV 1% |    CV 5% |   CV 10% |  1%  |  5%  | 10%  | Verdict
+-------------------------------------------------------------------------------------
+GDPC1      |  -2.4990 |  -3.4570 |  -2.8733 |  -2.5730 |   -  |  -  |  -  | Non-stationary
+PCE        |  -2.7860 |  -3.4570 |  -2.8733 |  -2.5730 |   -  |  -  |  +  | Non-stationary
+GPDI       |  -2.2397 |  -3.4570 |  -2.8733 |  -2.5730 |   -  |  -  |  -  | Non-stationary
+GCE        |  -2.5110 |  -3.4570 |  -2.8733 |  -2.5730 |   -  |  -  |  -  | Non-stationary
+EXPGSC1    |  -1.9514 |  -3.4570 |  -2.8733 |  -2.5730 |   -  |  -  |  -  | Non-stationary
+GDPDEF     |  -2.0150 |  -3.4570 |  -2.8733 |  -2.5730 |   -  |  -  |  -  | Non-stationary
+FEDFUNDS   |  -1.6446 |  -3.4570 |  -2.8733 |  -2.5730 |   -  |  -  |  -  | Non-stationary
+  Applied 1st difference to GDPC1
+  Applied 1st difference to PCE
+  Applied 1st difference to GPDI
+  Applied 1st difference to GCE
+  Applied 1st difference to EXPGSC1
+  Applied 1st difference to GDPDEF
+  Applied 1st difference to FEDFUNDS
+
+Final dataset shape after differencing: (263, 7)
+
+Augmented Dickey‑Fuller on FIRST DIFFERENCES: confirming stationarity:
+  GDPC1        : t-stat =  -6.6294, p-value = 0.0000 -> Stationary
+  PCE          : t-stat =  -5.6068, p-value = 0.0000 -> Stationary
+  GPDI         : t-stat =  -7.5432, p-value = 0.0000 -> Stationary
+  GCE          : t-stat =  -3.3531, p-value = 0.0127 -> Stationary
+  EXPGSC1      : t-stat =  -6.9856, p-value = 0.0000 -> Stationary
+  GDPDEF       : t-stat =  -2.9641, p-value = 0.0384 -> Stationary
+  FEDFUNDS     : t-stat =  -5.6281, p-value = 0.0000 -> Stationary
+
+ADF (first differences) vs MacKinnon critical values:
+Variable   |   t-stat |    CV 1% |    CV 5% |   CV 10% |  1%  |  5%  | 10%  | Verdict
+-------------------------------------------------------------------------------------
+GDPC1      |  -6.6294 |  -3.4571 |  -2.8733 |  -2.5730 |   +  |  +  |  +  | Stationary
+PCE        |  -5.6068 |  -3.4571 |  -2.8733 |  -2.5730 |   +  |  +  |  +  | Stationary
+GPDI       |  -7.5432 |  -3.4571 |  -2.8733 |  -2.5730 |   +  |  +  |  +  | Stationary
+GCE        |  -3.3531 |  -3.4571 |  -2.8733 |  -2.5730 |   -  |  +  |  +  | Stationary
+EXPGSC1    |  -6.9856 |  -3.4571 |  -2.8733 |  -2.5730 |   +  |  +  |  +  | Stationary
+GDPDEF     |  -2.9641 |  -3.4571 |  -2.8733 |  -2.5730 |   -  |  +  |  +  | Stationary
+FEDFUNDS   |  -5.6281 |  -3.4571 |  -2.8733 |  -2.5730 |   +  |  +  |  +  | Stationary
+ADF на ВТОРЫХ разностях для проблемных переменных:
+  PCE          : t-stat =  -7.0408, p-value = 0.0000 -> Stationary
+  GCE          : t-stat =  -5.7310, p-value = 0.0000 -> Stationary
+  GDPDEF       : t-stat =  -5.3200, p-value = 0.0000 -> Stationary
+
+ADF с фиксированным числом лагов = 4 (квартальные данные, стандарт):
+  PCE          : t-stat =  -5.6068, p-value = 0.0000 -> Stationary
+  GCE          : t-stat =  -3.3531, p-value = 0.0127 -> Stationary
+  GDPDEF       : t-stat =  -2.9641, p-value = 0.0384 -> Stationary
+
+================================================================================
+STEP 3: Selecting optimal lag order using AIC, BIC, and HQ...
+================================================================================
+Lag order selection criteria:
+  Lag    AIC        BIC        HQ
+   1   -54.5738   -53.9064   -54.3056
+   2   -53.9070   -51.2302   -52.8310
+   3   -52.4030   -46.3635   -49.9750
+   4   -50.0954   -39.3288   -45.7666
+   5   -47.1319   -30.2622   -40.3485
+   6   -43.1966   -18.8364   -33.4002
+   7   -38.4563    -5.2064   -25.0833
+   8   -32.8910    10.6596   -15.3731
+
+Optimal lag order: p = 1 (AIC) | p = 1 (BIC) | p = 1 (HQ)
+Optimal lag: AIC=1, BIC=1, HQ=1
+Using p = 1 for subsequent analysis.
+
+================================================================================
+STEP 4: Estimating VAR model via OLS...
+================================================================================
+VAR(1) model estimated successfully.
+Coefficient matrix shape: (8, 7)
+Residual covariance matrix shape: (7, 7)
+  Equation GDPC1: residual SE = 0.009809, R^2 = 0.155374
+  Equation PCE: residual SE = 0.015177, R^2 = 0.328272
+  Equation GPDI: residual SE = 0.038597, R^2 = 0.096161
+  Equation GCE: residual SE = 0.009639, R^2 = 0.191608
+  Equation EXPGSC1: residual SE = 0.033173, R^2 = 0.161970
+  Equation GDPDEF: residual SE = 0.002797, R^2 = 0.771694
+  Equation FEDFUNDS: residual SE = 1.066485, R^2 = 0.108492
+
+================================================================================
+STEP 5: Generating forecasts (8 quarters ahead)...
+================================================================================
+Forecasts for 8 quarters ahead:
+  GDPC1        : 25491.48 (last forecast)
+  PCE          : 24262.96 (last forecast)
+  GPDI         :  6302.61 (last forecast)
+  GCE          :  6006.40 (last forecast)
+  EXPGSC1      :  2973.14 (last forecast)
+  GDPDEF       :   140.19 (last forecast)
+  FEDFUNDS     :     4.20 (last forecast)
+
+================================================================================
+STEP 6: Computing Impulse Response Functions (IRF)...
+================================================================================
+IRF computed for 20 periods, shape = (20, 7, 7)
+[historical_decomposition] |sum_j HD_ij(t) - demeaned e_it| > 1e-4 for 1804 (t,i) pairs (max 1.572806e+00); typical under finite H.
+
+Historical decomposition array shape (262, 7, 7) (T_eff=262); hd_plot_data keys: ['GDPC1', 'PCE', 'GPDI', 'GCE', 'EXPGSC1', 'GDPDEF', 'FEDFUNDS']
+
+================================================================================
+STEP 7: Generating plots...
+================================================================================
+2026-04-18 02:07:31.915 Python[7012:304022] ApplePersistenceIgnoreState: Existing state will not be touched. New state will be written to /var/folders/63/7smz88gx3bx9s_q_6kdtrhjh0000gn/T/org.python.python.savedState
+
+FEVD table [%] at horizons 4, 8, 20 (all variables):
+                  GDPC1    PCE   GPDI    GCE  EXPGSC1  GDPDEF  FEDFUNDS
+horizon variable                                                       
+4       GDPC1     86.50   9.24   0.55   1.60     0.02    1.48      0.61
+        PCE       39.50  50.44   0.79   0.35     0.08    8.43      0.42
+        GPDI      54.52   6.05  33.95   3.53     0.06    1.75      0.15
+        GCE        4.16   3.15   6.13  82.58     0.16    3.71      0.11
+        EXPGSC1   18.48   8.63   0.99   0.89    67.52    1.50      2.00
+        GDPDEF     1.74  10.31   9.21  12.39     0.71   65.38      0.26
+        FEDFUNDS   7.78   1.13   3.60   1.95     1.18    1.98     82.38
+8       GDPC1     86.14   9.24   0.58   1.64     0.02    1.77      0.61
+        PCE       38.80  49.88   0.94   0.55     0.10    9.31      0.42
+        GPDI      54.50   6.05  33.94   3.54     0.06    1.76      0.15
+        GCE        4.04   3.36   6.21  79.76     0.17    6.33      0.12
+        EXPGSC1   18.48   8.63   0.99   0.89    67.51    1.50      2.01
+        GDPDEF     1.56  10.01   9.04  12.41     0.67   66.02      0.28
+        FEDFUNDS   7.78   1.13   3.60   1.95     1.18    2.00     82.36
+20      GDPC1     85.96   9.24   0.59   1.67     0.03    1.91      0.61
+        PCE       38.46  49.52   1.01   0.66     0.11    9.83      0.42
+        GPDI      54.50   6.05  33.94   3.54     0.06    1.77      0.15
+        GCE        3.98   3.48   6.26  78.34     0.18    7.63      0.13
+        EXPGSC1   18.48   8.63   0.99   0.89    67.51    1.50      2.01
+        GDPDEF     1.50   9.89   8.98  12.42     0.66   66.25      0.29
+        FEDFUNDS   7.78   1.13   3.60   1.95     1.18    2.00     82.35
+
+=== DIAGNOSTIC SUMMARY ===
+  autocorrelation     : FAIL
+  heteroskedasticity  : FAIL
+  normality           : FAIL
+
+================================================================================
+ANALYSIS COMPLETE.
+================================================================================
+Saved plots:
+  var_forecasts.png
+  var_forecasts_zoom.png
+  var_irf.png
+  var_irf_monetary.png
+  var_lag_criteria.png
+  var_fevd_GDPC1.png
+  var_fevd_PCE.png
+  var_fevd_GPDI.png
+  var_fevd_GCE.png
+  var_fevd_EXPGSC1.png
+  var_fevd_GDPDEF.png
+  var_fevd_FEDFUNDS.png
+  var_hd_GDPC1.png
+  var_hd_FEDFUNDS.png
+  var_diagnostics.png
